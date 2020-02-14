@@ -1,0 +1,40 @@
+#!/bin/sh
+# send keycodes based on which app has focus when gesture performed
+# set a gesture to this script with 'IN' or 'OUT' as arguments based on
+# pinchin/pinchout
+INOUT=$1
+TREE=`swaymsg -t get_tree`
+APP=`echo $TREE | jq '.nodes[1] | .. | objects | select(.focused==true)'`
+APPNAME=`echo $APP | jq '.app_id'`
+if [ "$APPNAME" = "null" ]; then
+	APPNAME=`echo $APP | jq '.window_properties.class'`
+fi;
+APPNAME=`echo $APPNAME | sed -e 's/"//g'`
+#notify-send "pinch is $INOUT, app is $APPNAME"
+case $APPNAME in
+	"kitty")
+		if [ "$INOUT" = "IN" ]; then
+		    ydotool key ctrl+shift+=
+		else
+		    ydotool key ctrl+shift+-
+		fi
+		;;
+	"firefoxdeveloperedition"|"Google-chrome")
+		if [ "$INOUT" = "IN" ]; then
+		    ydotool key ctrl+=
+		else
+		    ydotool key ctrl+-
+		fi
+		;;
+	"MuPDF")
+		if [ "$INOUT" = "IN" ]; then
+		    ydotool key shift+=
+		else
+		    ydotool key -
+		fi
+		;;
+	*)
+		notify-send "Pinch on $APPNAME unhandled"
+		;;
+esac
+
