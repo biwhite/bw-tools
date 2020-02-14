@@ -6,6 +6,9 @@ Useful to tie into arch regular upgrade process
 
 ## brightchange
 Change screen brightness
+This requires the user to have write access to the relevant backlight control
+file.  Likely ``/sys/class/backlight/*/brightness``.  Which is owned by the
+``video`` group
 Mako snippet to group notifications and timeout quickly.
 
 .config/sway/config

@@ -6,12 +6,15 @@ fi
 getnewbrightness () {
     CURBRIGHT=`light -G | cut -d\. -f 1`
 }
+# requires user with write access to the
+# /sys/class/backlight/*/brightness file
+# On arch, this is achieved by adding the user to the 'video' group
 if [ $1 = 'brighter' ]; then
     MSG='Brighten'
-    sudo light -A 5
+    light -A 5
 elif [ $1 = 'dimmer' ]; then
     MSG='Dim'
-    sudo light -U 5
+    light -U 5
 fi
 getnewbrightness
 echo $MSG $CURBRIGHT
