@@ -1,0 +1,19 @@
+#!/bin/sh
+if [ $# -ne 1 ]; then
+    echo "Need 1 argument (brighter dimmer)"
+    exit 1;
+fi
+getnewbrightness () {
+    CURBRIGHT=`light -G | cut -d\. -f 1`
+}
+if [ $1 = 'brighter' ]; then
+    MSG='Brighten'
+    sudo light -A 5
+elif [ $1 = 'dimmer' ]; then
+    MSG='Dim'
+    sudo light -U 5
+fi
+getnewbrightness
+echo $MSG $CURBRIGHT
+notify-send -a brightchange "$MSG ($CURBRIGHT%)" -i /usr/share/icons/Adwaita/32x32/status/display-brightness-symbolic.symbolic.png
+
